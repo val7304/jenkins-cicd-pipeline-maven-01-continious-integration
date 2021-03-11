@@ -10,7 +10,7 @@ pipeline {
         stage("Clone App from Git"){
             steps{
                 echo "====++++  Clone App from Git ++++===="
-                git branch:"master", url: "https://github.com/val7304/challenge-CI-CD-jenkins-ansible.git"
+                git branch:"main", url: "https://github.com/val7304/challenge-CI-CD-jenkins-ansible.git"
             }          
         }
         // Build and Unit Test (Maven/JUnit)
@@ -23,13 +23,12 @@ pipeline {
          // Deploiement du WAR sur le server-staging avec Ansible
         stage("Deploy WAR on staging using Ansible"){
             steps{
-                
-                echo "====++++  Deploy WAR on staging using Ansible ++++===="
+               echo "====++++  Deploy WAR on staging using Ansible ++++===="
        
-               ansiblePlaybook   credentialsId: 'ssh-on-server-staging', 
-                      //extras: '-e version=${VERSION}', 
-                      //inventory: 'development', 
-                      playbook: 'infra-ansible/playbook-deploy-staging.yaml'             
+               ansiblePlaybook credentialsId: 'ssh-on-server-staging', 
+               //extras: '-e version=${VERSION}', 
+                inventory: '$WORKSPACE/ansible/hosts', 
+                playbook: 'infra-ansible/playbook-deploy-staging.yaml'             
             } 
         }        
     }
